@@ -46,7 +46,7 @@ input{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
     color: white;
 }
 .creditos a{

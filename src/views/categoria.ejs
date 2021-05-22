@@ -9,7 +9,7 @@
 </head>
 <body>
     <%- include('./partials/header.ejs'); -%>
-    <div id="resultado" class="containerBlog"></div>
+    <div id="relacionadas" class="containerBlog"></div>
     <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
     <script>
@@ -39,7 +39,7 @@
             const post= doc.data()
             const id= doc.id
             console.log(id)
-            document.getElementById("resultado").innerHTML+=`
+            document.getElementById("relacionadas").innerHTML+=`
             <a href="/blog/${id}"><div class="card" id="${id}">
                 <img class="cardImg" src="${post.imgDes}">
                 <h2 class="cardTitle">${post.titulo}</h2>
@@ -53,6 +53,5 @@
     <footer>
         <%- include('./partials/footer.ejs'); -%>
     </footer>
-    <%- include('./partials/menu.ejs'); -%>
 </body>
 </html>
