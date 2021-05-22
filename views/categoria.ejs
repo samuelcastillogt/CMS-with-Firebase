@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title id="cate"></title>
+</head>
+<body>
+    <%- include('./partials/header.ejs'); -%>
+    <div id="relacionadas" class="containerBlog"></div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script>
+        const pre= window.location.pathname.replace("/categoria/", "")
+        document.getElementById("cate").innerHTML = pre
+        const pre1= pre.charAt(0).toUpperCase();
+        const pre2 = pre.slice(1); 
+        const categoria = pre1+pre2
+        console.log(categoria)
+        var firebaseConfig = {
+        apiKey: "AIzaSyDSSeuU8iHnoN3ucTzTFhfn6GylKIqasL0",
+    authDomain: "escuela-32bef.firebaseapp.com",
+    databaseURL: "https://escuela-32bef.firebaseio.com",
+    projectId: "escuela-32bef",
+    storageBucket: "escuela-32bef.appspot.com",
+    messagingSenderId: "913904034443",
+    appId: "1:913904034443:web:822c99f3fdd229fddbea8e",
+    measurementId: "G-K2VS202KHJ"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore()
+      db.collection("blog").where("categoria", "==", categoria)
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            const post= doc.data()
+            const id= doc.id
+            console.log(id)
+            document.getElementById("relacionadas").innerHTML+=`
+            <a href="/blog/${id}"><div class="card" id="${id}">
+                <img class="cardImg" src="${post.imgDes}">
+                <h2 class="cardTitle">${post.titulo}</h2>
+                </div></a>`               
+              })
+            })
+        
+        ;
+        
+    </script>
+    <footer>
+        <%- include('./partials/footer.ejs'); -%>
+    </footer>
+</body>
+</html>

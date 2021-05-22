@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Que significa la cancion</title>
+</head>
+<body>
+    <%- include('./partials/header.ejs'); -%>
+    <div class="hero">
+        <h1>Las historias y significado detras de las canciones...</h1>
+        <p>Conoce las anecdotas que formaron las canciones que mas te gustan.</p>
+    </div>
+    <div class="containerBlog" id="containerBlog"></div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script type="module" src="index.js">
+    </script>
+    <footer>
+        <%- include('./partials/footer.ejs'); -%>
+    </footer>
+</body>
+</html>

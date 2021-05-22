@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Desktok</title>
+</head>
+<body>
+    <header>
+        <span>Menu de administracion</span>
+    </header>
+    <div id="containerBlog"></div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
+    
+    <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyDSSeuU8iHnoN3ucTzTFhfn6GylKIqasL0",
+    authDomain: "escuela-32bef.firebaseapp.com",
+    databaseURL: "https://escuela-32bef.firebaseio.com",
+    projectId: "escuela-32bef",
+    storageBucket: "escuela-32bef.appspot.com",
+    messagingSenderId: "913904034443",
+    appId: "1:913904034443:web:822c99f3fdd229fddbea8e",
+    measurementId: "G-K2VS202KHJ"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/default.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sceditor@3/minified/sceditor.min.js"></script>
+    <script>
+        
+var textarea = document.getElementById('example');
+sceditor.create(textarea, {
+	format: 'xhtml',
+	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css'
+   
+},
+);
+db.collection("blog")
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            const post= doc.data()
+            const id= doc.id
+            console.log(id)
+            document.getElementById("containerBlog").innerHTML+=`
+            <a href="/blog/${id}"><div class="card" id="${id}">
+                <img class="cardImg" src="${post.imgDes}">
+                <h2 class="cardTitle">${post.titulo}</h2>
+                </div></a>`               
+              })
+            })
+        
+        ;
+        
+document.getElementById("hola").addEventListener("click", ()=>{
+    const cuerpo = sceditor.instance(textarea).val()
+    const titulo = document.getElementById("titulo").value
+    const slug = document.getElementById("slug").value
+    const metadesc = document.getElementById("MetaDescripcion").value
+    const imgDest = document.getElementById("imgDest").value
+    const categoria = document.getElementById("categoria").value
+    const db = firebase.firestore();
+    const post = {
+        titulo: titulo,
+        cuerpo:  cuerpo,
+        slug: slug,
+        metadesc: metadesc,
+        imgDes: imgDest,
+        categoria: categoria
+    }
+    console.log(post)
+    db.collection("blog").doc(slug).set(post).then(()=>{
+      document.getElementById("form").innerHTML=` `
+        document.getElementById("form").innerHTML=`Ya esta listo`
+    })
+    .catch(()=>{
+        console.log("oh no")
+    })
+
+
+})
+const imagen= document.getElementById('file')
+imagen.addEventListener('change', function(evento){
+    evento.preventDefault();
+   
+    var archivo  = evento.target.files[0];
+   
+    subirArchivo(archivo);
+   });
+function subirArchivo(archivo) {
+    const storageService= firebase.storage();
+    const ruta = storageService.ref('img-post').child(archivo.name);
+    var uploadTask = ruta.put(archivo)
+
+
+    uploadTask.on('state_changed', function(snapshot){
+       // Observe state change events such as progress, pause, and resume
+       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+       console.log('Upload is ' + progress + '% done');
+       document.getElementById("previa").innerHTML=`<p class="h2">Subida: ${progress.toFixed(2)}%`
+       switch (snapshot.state) {
+         case firebase.storage.TaskState.PAUSED: // or 'paused'
+           console.log('Upload is paused');
+           break;
+         case firebase.storage.TaskState.RUNNING: // or 'running'
+           console.log('Upload is running');
+           break;
+       }
+     }, function(error) {
+       // Handle unsuccessful uploads
+     }, function() {
+       // Handle successful uploads on complete
+       // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+       uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+         console.log('File available at', downloadURL);
+         //document.getElementById("previa").innerHTML=`<img class="img-previa" img-previa src="${downloadURL}">`
+         document.getElementById("imagen").value = downloadURL
+       });
+     });
+    }
+    var boton= document.getElementById("copiar")
+    
+boton.addEventListener('click', function(event) {
+  // seleccionar el texto de la dirección de email
+  var link = document.getElementById("imagen");
+  var range = document.createRange();
+  range.selectNode(link);
+  window.getSelection().addRange(range);
+
+  try {
+    // intentar copiar el contenido seleccionado
+    var resultado = document.execCommand('copy');
+    console.log(resultado ? document.getElementById("copiaro").innerHTML=`URL copiada` : 'No se pudo copiar el email');
+  } catch(err) {
+    console.log('ERROR al intentar copiar el email');
+  }
+
+    })
+    </script>
+
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+
+
+
+</body>
+</html>
