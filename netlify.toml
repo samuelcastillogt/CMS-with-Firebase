@@ -1,5 +1,5 @@
 [build]
   functions = "functions"
-command = "npm install && npm run build"
+command = "npm install"
 [dev]
   publish = "/"
