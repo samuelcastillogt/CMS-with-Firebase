@@ -1,5 +1,1 @@
-[build]
-  functions = "functions"
-command = "npm install"
-[dev]
-  publish = "/"
+
